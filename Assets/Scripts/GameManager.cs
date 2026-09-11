@@ -61,22 +61,4 @@ public class GameManager : MonoBehaviour
             Debug.Log("You Win!");
         }
     }
-
-    void OnEnable()
-    {
-        Enemy.OnEnemyDied += AddScoreifEnemyDied;
-    }
- 
-    void OnDisable()
-    {
-        Enemy.OnEnemyDied -= AddScoreifEnemyDied;
-    }
- 
-    void AddScoreifEnemyDied(Enemy EnemyIsDying)
-    {
-        Score = Score + 10;
-        ScoreUI();
-        Debug.Log("Score: " + Score);
-    }
-
 }   
