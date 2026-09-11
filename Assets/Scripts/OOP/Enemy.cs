@@ -1,9 +1,10 @@
 using UnityEngine;
 using System;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour , IDamageable
 {
     [Header("Enemy Settings")]
+    [SerializeField] public float Health = 100f;
     [SerializeField] private float DetectionRange = 4f;
     [SerializeField] private float AttackRange = 1.5f;
     [SerializeField] private float BetweenAttack = 1f;
@@ -15,7 +16,6 @@ public class Enemy : MonoBehaviour
     private EnemyState state = EnemyState.IDLE;
     private float LastAttackTime;
 
-    public static event Action<Enemy> OnEnemyDied;
     protected Transform player;
 
     protected virtual void Start()
@@ -142,5 +142,22 @@ public class Enemy : MonoBehaviour
         {
             state = EnemyState.PATROL;
         }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        Health -= amount;
+        Debug.Log("Zombie terkena damage sebesar: " + amount + ". Sisa darah: " + Health);
+
+        if (Health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("Zombie mati!");
+        Destroy(gameObject);
     }
 }
