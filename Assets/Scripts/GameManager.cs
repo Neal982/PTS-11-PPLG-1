@@ -1,64 +1,29 @@
 using UnityEngine;
-using UnityEngine.Events;
-using TMPro;
-using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, GrabAbleItem
 {
     public static GameManager Instance;
+    private InventoryManager inventory;
 
-    public int TotalCoin;
-    public int Score = 0;
-    private int CoinCollected = 0;
-
-    [Header("UI")]
-    public TextMeshProUGUI scoreText; 
-    public TextMeshProUGUI winText;
-
-
-    void Awake()
+    private void Awake()
     {
         Instance = this;
+        inventory = FindFirstObjectByType<InventoryManager>();
     }
 
-    void Start()
+    public bool AddItem(ItemDetails itemDetails)
     {
-        TotalCoin = GameObject.FindGameObjectsWithTag("Coin").Length;
-        ScoreUI();
-    }
-
-    
-
-    public void CollectCoin()
-    {
-        CoinCollected++;
-        Score++;
-
-        ScoreUI();
-
-        if (CoinCollected == TotalCoin)
-            ShowWinScreen();
-    }
-
-    public void ScoreUI()
-    {
-
-        Debug.Log("Score: " + Score);
-
-        if (scoreText != null)
+        if (inventory == null)
         {
-            scoreText.text = "Score: " + Score;
+            inventory = FindFirstObjectByType<InventoryManager>();
         }
 
-    }
-
-    void ShowWinScreen()
-    {
-        if (winText != null)
+        if (inventory == null)
         {
-            Time.timeScale = 0f;
-            winText.text = "You Win!";
-            Debug.Log("You Win!");
+            Debug.LogWarning("InventoryManager not found in the scene!");
+            return false;
         }
+
+        return inventory.AddItem(itemDetails);
     }
-}   
+}
